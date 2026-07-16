@@ -367,7 +367,12 @@ def _serve(root: Path, name: str):
     dest = (root / name).resolve()
     if root.resolve() not in dest.parents or not dest.is_file():
         raise HTTPException(404)
-    return FileResponse(dest)
+    # Force revalidation on the runtime + templates so a content/template edit
+    # is never masked by a heuristically-cached (stale) copy. The 304 round-trip
+    # is cheap; without this, editing a page shows old HTML until the cache expires.
+    headers = ({"Cache-Control": "no-cache"}
+               if dest.suffix in (".html", ".js") else None)
+    return FileResponse(dest, headers=headers)
 
 
 if __name__ == "__main__":
