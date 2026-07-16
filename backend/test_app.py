@@ -38,4 +38,10 @@ assert r.json()["skills"] == ["a", "b"]
 c.put("/api/about", json={"text": "bio", "photo": "/uploads/p.png"})
 assert c.get("/api/about").json()["text"] == "bio"
 
+# rich fields are sanitized on write: <script> stripped, safe formatting kept
+r = c.post("/api/notes", json={"text": "<script>alert(1)</script>hi<b>x</b>"})
+saved = r.json()["text"]
+assert "<script>" not in saved and "alert" not in saved, saved
+assert "hi" in saved and "<b>x</b>" in saved, saved
+
 print("all tests passed")

@@ -45,7 +45,7 @@
             <div style="font-weight:600;font-size:clamp(1.7rem,7vw,3.2rem);letter-spacing:-.025em;line-height:1;">{{ p.title }}</div>
             <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:rgba(234,231,223,.5);white-space:nowrap;">{{ p.release_date }}</div>
           </div>
-          <p style="max-width:60ch;margin:clamp(14px,2.5vh,22px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;">{{ p.description }}</p>
+          <div dc-html="{{ p.description }}" style="max-width:60ch;margin:clamp(14px,2.5vh,22px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(16px,3vh,22px);">
             <sc-for list="{{ p.skills }}" as="sk" hint-placeholder-count="3">
               <span style="font-family:'Space Mono',monospace;font-size:clamp(9px,2.4vw,11px);letter-spacing:.06em;text-transform:uppercase;color:rgba(234,231,223,.62);border:1px solid rgba(234,231,223,.16);padding:5px 11px;">{{ sk }}</span>

@@ -47,7 +47,7 @@
           </div>
           <div>
             <div style="font-weight:600;font-size:clamp(1.4rem,5.5vw,2.8rem);letter-spacing:-.025em;line-height:1.02;text-wrap:balance;">{{ w.title }}</div>
-            <p style="max-width:54ch;margin:clamp(12px,2vh,20px) 0 0;font-size:clamp(.98rem,3.4vw,1.2rem);line-height:1.5;color:rgba(234,231,223,.7);text-wrap:pretty;white-space:pre-wrap;">{{ w.text }}</p>
+            <div dc-html="{{ w.text }}" style="max-width:54ch;margin:clamp(12px,2vh,20px) 0 0;font-size:clamp(.98rem,3.4vw,1.2rem);line-height:1.5;color:rgba(234,231,223,.7);text-wrap:pretty;"></div>
           </div>
         </div>
       </sc-for>

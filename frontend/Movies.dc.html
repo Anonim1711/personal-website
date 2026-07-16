@@ -48,7 +48,7 @@
           </div>
           <div style="font-weight:600;font-size:clamp(1.5rem,6vw,2.6rem);letter-spacing:-.02em;line-height:1.04;margin-top:clamp(14px,2.5vh,22px);">{{ m.name }}</div>
           <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.8vw,13px);letter-spacing:.06em;color:rgba(234,231,223,.6);margin-top:6px;">{{ m.author }}</div>
-          <p style="max-width:60ch;margin:clamp(12px,2.2vh,20px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;white-space:pre-wrap;">{{ m.review }}</p>
+          <div dc-html="{{ m.review }}" style="max-width:60ch;margin:clamp(12px,2.2vh,20px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
         </div>
       </sc-for>
     </section>

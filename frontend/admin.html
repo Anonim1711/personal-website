@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin — Usmonbek Anvarbekov</title>
+<!-- CKEditor 5 classic build (pre-v42: global ClassicEditor, no license key needed) -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <style>
   *{box-sizing:border-box;}
   body{margin:0;background:#0B0B0C;color:#EAE7DF;font-family:'Space Grotesk',system-ui,sans-serif;}
@@ -136,17 +138,34 @@ async function onUpload(inp, targetId, kind){
       ? `<img class="thumb" src="${esc(url)}">` : `<video class="thumb" src="${esc(url)}" muted></video>`;
   }catch(e){ alert('Upload failed'); } finally{ inp.disabled=false; }
 }
-function collect(section){
+// CKEditor instances, keyed by their <textarea> element (ids collide between the
+// add form and an inline edit form, so we key by element and scope reads to a container).
+const editors = new Map();
+function mountEditors(container){
+  if(!container || !window.ClassicEditor) return;
+  container.querySelectorAll('textarea').forEach(ta=>{
+    if(editors.has(ta)) return;
+    ClassicEditor.create(ta).then(ed=>editors.set(ta, ed)).catch(()=>{});
+  });
+}
+function destroyEditors(){
+  editors.forEach(ed=>{ try{ ed.destroy(); }catch(e){} });
+  editors.clear();
+}
+function collect(section, container){
+  container = container || document;
   const out={};
   for(const [field,kind] of SCHEMA[section]){
-    const el=document.getElementById('f_'+field); if(!el) continue;
+    const el=container.querySelector('#f_'+field); if(!el) continue;
     if(kind==='list') out[field]=el.value.split(',').map(s=>s.trim()).filter(Boolean);
+    else if(kind==='textarea') out[field]= editors.has(el) ? editors.get(el).getData() : el.value;
     else out[field]=el.value;
   }
   return out;
 }
 
 async function render(){
+  destroyEditors();  // view is about to be rebuilt; drop any live editors first
   [...tabs.children].forEach(b=>b.classList.toggle('active', b.dataset.sec===current));
   view.innerHTML='<p class="mono">Loading…</p>';
   const data = await api('GET','/'+current);
@@ -163,10 +182,11 @@ function formHtml(section, item){
 function renderAbout(item){
   view.innerHTML = `<h2>About</h2><div class="card">${formHtml('about',item)}
     <div style="margin-top:16px"><button onclick="saveAbout()">Save</button><span class="status" id="msg"></span></div></div>`;
+  mountEditors(view);
 }
 async function saveAbout(){
   msg.textContent='Saving…';
-  await api('PUT','/about', collect('about'));
+  await api('PUT','/about', collect('about', view));
   msg.textContent='Saved ✓';
 }
 
@@ -176,6 +196,7 @@ function renderCollection(section, items){
     <div class="card"><div class="mono">Add new</div><div id="addform">${formHtml(section,null)}</div>
       <div style="margin-top:16px"><button onclick="addItem('${section}')">Add</button><span class="status" id="msg"></span></div></div>
     <div id="items"></div>`;
+  mountEditors(document.getElementById('addform'));
   const box=document.getElementById('items');
   if(!items.length){ box.innerHTML='<p class="mono">Nothing yet.</p>'; return; }
   items.forEach(it=>{
@@ -190,7 +211,7 @@ function renderCollection(section, items){
 }
 async function addItem(section){
   msg.textContent='Saving…';
-  await api('POST','/'+section, collect(section));
+  await api('POST','/'+section, collect(section, document.getElementById('addform')));
   render();
 }
 function editItem(section, id){
@@ -199,9 +220,11 @@ function editItem(section, id){
   div.innerHTML=`<div class="meta" style="flex:1">${formHtml(section,it)}
     <div style="margin-top:14px"><button onclick='saveEdit("${section}",${id})'>Save</button>
     <button class="ghost" onclick='render()'>Cancel</button></div></div>`;
+  mountEditors(div);
 }
 async function saveEdit(section, id){
-  await api('PUT','/'+section+'/'+id, collect(section));
+  const div=[...document.querySelectorAll('.list-item')].find(d=>JSON.parse(d.dataset.item).id===id);
+  await api('PUT','/'+section+'/'+id, collect(section, div));
   render();
 }
 async function delItem(section, id){

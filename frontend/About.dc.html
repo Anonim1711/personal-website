@@ -49,7 +49,7 @@
         <img src="{{ src }}" alt="Portrait" style="width:100%;max-height:520px;object-fit:cover;border:1px solid rgba(234,231,223,.14);margin:clamp(20px,4vh,40px) 0;">
       </sc-for>
 
-      <p style="font-size:clamp(1.05rem,4vw,1.35rem);line-height:1.7;margin:clamp(20px,4vh,40px) 0 0;text-wrap:pretty;color:rgba(234,231,223,.9);white-space:pre-wrap;">{{ about.text }}</p>
+      <div dc-html="{{ about.text }}" style="font-size:clamp(1.05rem,4vw,1.35rem);line-height:1.7;margin:clamp(20px,4vh,40px) 0 0;text-wrap:pretty;color:rgba(234,231,223,.9);"></div>
 
       <div style="margin-top:clamp(48px,8vh,80px);">
         <a href="/" style="font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">← Back to the index</a>

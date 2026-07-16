@@ -69,7 +69,7 @@
       <div style="font-family:'Space Mono',monospace;font-size:clamp(9px,2.4vw,11px);letter-spacing:.12em;text-transform:uppercase;color:#C6432B;margin-bottom:12px;">Now open</div>
       <div style="font-weight:600;font-size:clamp(1.6rem,6vw,2.6rem);letter-spacing:-.02em;line-height:1.04;">{{ sel.name }}</div>
       <div style="font-size:clamp(1rem,3.6vw,1.2rem);color:rgba(234,231,223,.6);margin-top:6px;">{{ sel.author }}</div>
-      <p style="margin:clamp(16px,3vh,24px) 0 0;font-size:clamp(1rem,3.6vw,1.18rem);line-height:1.55;color:rgba(234,231,223,.75);text-wrap:pretty;white-space:pre-wrap;">{{ sel.review }}</p>
+      <div dc-html="{{ sel.review }}" style="margin:clamp(16px,3vh,24px) 0 0;font-size:clamp(1rem,3.6vw,1.18rem);line-height:1.55;color:rgba(234,231,223,.75);text-wrap:pretty;"></div>
       </sc-if>
     </section>
   </main>

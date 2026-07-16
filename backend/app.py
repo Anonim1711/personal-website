@@ -12,6 +12,8 @@ import os
 import secrets
 from pathlib import Path
 
+import nh3
+
 from fastapi import FastAPI, Request, UploadFile, HTTPException
 from fastapi.responses import JSONResponse, FileResponse
 from starlette.middleware.sessions import SessionMiddleware
@@ -36,8 +38,14 @@ app = FastAPI()
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
+    https_only=bool(os.environ.get("RAILWAY_ENVIRONMENT")),  # Secure cookie in prod
 )
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
+# No insecure default: the repo is public, so a missing password must fail loudly
+# rather than silently accept "admin".
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+if not ADMIN_PASSWORD:
+    raise RuntimeError("ADMIN_PASSWORD is not set (put it in backend/.env locally, "
+                       "or a Railway variable in prod)")
 
 DB_URL = os.environ.get("DATABASE_URL", "sqlite:///content.db")
 # Railway/Heroku hand out bare "postgresql://"; psycopg3 needs the +psycopg driver.
@@ -193,6 +201,12 @@ def delete_uploads(d):
                 f.unlink()
 
 
+# fields holding rich HTML from the admin's WYSIWYG editor — sanitized on write so
+# stored HTML is safe for every reader (the single trust boundary). These names are
+# unique to long-form content; short fields are title/name/author/etc.
+RICH_FIELDS = {"text", "review", "description"}
+
+
 def apply_fields(obj, data, fields):
     for f in fields:
         if f not in data:
@@ -200,13 +214,16 @@ def apply_fields(obj, data, fields):
         val = data[f]
         if f == "skills":  # stored as JSON string
             val = json.dumps(val if isinstance(val, list) else [])
+        elif f in RICH_FIELDS and isinstance(val, str):
+            val = nh3.clean(val)
         setattr(obj, f, val)
 
 
 # ---- auth ----
 @app.post("/api/login")
 async def login(request: Request):
-    if (await json_body(request)).get("password") == ADMIN_PASSWORD:
+    pw = (await json_body(request)).get("password") or ""
+    if secrets.compare_digest(pw, ADMIN_PASSWORD):
         request.session["admin"] = True
         return {"ok": True}
     raise HTTPException(401)

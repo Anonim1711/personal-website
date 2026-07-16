@@ -690,6 +690,11 @@
   function walkElement(el, host) {
     const realTag = RAW_UNWRAP[el.localName] || el.localName;
     const tplId = el.getAttribute("data-dc-tpl");
+    // dc-html="{{ expr }}" renders the resolved value as raw HTML (already sanitized
+    // on the backend at write time). Element gets no children when present.
+    const htmlRaw = el.getAttribute("dc-html");
+    const htmlGet = htmlRaw != null ? compileAttr(htmlRaw) : null;
+    if (htmlGet) el.removeAttribute("dc-html");
     const inlineOnly = el.childNodes.length > 0 && !NEVER_CONTENT_KEYED.has(realTag) && el.querySelector(NOT_INLINE_SELECTOR) === null;
     const keySuffix = inlineOnly ? "|" + contentKey(el) : "";
     const { propGetters, pseudoClasses } = collectProps(el, "dom", host);
@@ -709,6 +714,10 @@
       }
       if (pseudoClasses.length) {
         props.className = [props.className, ...pseudoClasses].filter(Boolean).join(" ");
+      }
+      if (htmlGet) {
+        props.dangerouslySetInnerHTML = { __html: htmlGet(vals) || "" };
+        return h(realTag, props);
       }
       return h(realTag, props, ...kids.map((b, j) => b(vals, ctx, j)));
     };
