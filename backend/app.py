@@ -356,6 +356,19 @@ async def index():
     return _serve(FRONTEND, PAGES[""])
 
 
+# detail pages: /movies/<id> and /writing/<id> (declared before the catch-all so
+# the numeric id doesn't fall through to the raw-file server). The template reads
+# the id from the URL and fetches the item client-side.
+@app.get("/movies/{item_id:int}")
+async def movie_detail(item_id: int):
+    return _serve(FRONTEND, "MovieDetail.dc.html")
+
+
+@app.get("/writing/{item_id:int}")
+async def writing_detail(item_id: int):
+    return _serve(FRONTEND, "WritingDetail.dc.html")
+
+
 @app.get("/{name:path}")
 async def serve_frontend(name: str):
     # clean slug -> template; otherwise serve the file as-is (assets, old .html links)

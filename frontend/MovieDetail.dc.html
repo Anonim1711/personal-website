@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./particles.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{background:#0B0B0C;color:#EAE7DF;font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+    a{color:#C6432B;text-decoration:none;}
+    a:hover{color:#EAE7DF;}
+    ::selection{background:#C6432B;color:#0B0B0C;}
+  </style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:transparent;color:#EAE7DF;overflow:hidden;">
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(234,231,223,.04) 1px,transparent 1px);background-size:clamp(64px,20vw,132px) 100%;"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px clamp(16px,4vw,40px) 26px;background:linear-gradient(to bottom,#0B0B0C 52%,rgba(11,11,12,.72) 78%,rgba(11,11,12,0));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.08em;color:rgba(234,231,223,.82);text-transform:uppercase;">
+    <a href="/movies" style="color:rgba(234,231,223,.82);display:inline-flex;align-items:center;gap:8px;" style-hover="color:#C6432B;"><span>←</span> Movies</a>
+    <span style="opacity:.55;">{{ film.name }}</span>
+  </header>
+
+  <main style="position:relative;z-index:2;max-width:1180px;margin:0 auto;">
+    <section style="padding:clamp(112px,18vh,200px) clamp(16px,4vw,40px) clamp(72px,14vh,140px);">
+      <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(234,231,223,.14);background:transparent;">
+        <sc-if value="{{ film.video }}">
+          <video src="{{ film.video }}" controls muted="true" loop="true" playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+        </sc-if>
+      </div>
+      <h1 style="font-weight:600;font-size:clamp(1.8rem,7vw,3.4rem);letter-spacing:-.02em;line-height:1.02;margin:clamp(18px,3vh,28px) 0 0;">{{ film.name }}</h1>
+      <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.8vw,13px);letter-spacing:.06em;color:rgba(234,231,223,.6);margin-top:8px;">{{ film.author }}</div>
+      <div dc-html="{{ film.review }}" style="max-width:65ch;margin:clamp(18px,3vh,28px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.6;color:rgba(234,231,223,.82);text-wrap:pretty;"></div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { film: {} };
+  componentDidMount() {
+    const id = Number(location.pathname.split('/').pop());
+    fetch('/api/movies').then(r => r.json())
+      .then(films => this.setState({ film: films.find(m => m.id === id) || {} }))
+      .catch(() => {});
+    const mute = () => document.querySelectorAll('video').forEach(v => { v.muted = true; });
+    mute();
+    new MutationObserver(mute).observe(document.body, { childList: true, subtree: true });
+  }
+  renderVals() { return { film: this.state.film }; }
+}
+</script>
+</body>
+</html>

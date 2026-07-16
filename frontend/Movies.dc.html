@@ -46,9 +46,9 @@
               <video src="{{ m.video }}" controls muted="true" loop="true" playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
             </sc-if>
           </div>
-          <div style="font-weight:600;font-size:clamp(1.5rem,6vw,2.6rem);letter-spacing:-.02em;line-height:1.04;margin-top:clamp(14px,2.5vh,22px);">{{ m.name }}</div>
+          <a href="/movies/{{ m.id }}" style="display:block;color:#EAE7DF;font-weight:600;font-size:clamp(1.5rem,6vw,2.6rem);letter-spacing:-.02em;line-height:1.04;margin-top:clamp(14px,2.5vh,22px);" style-hover="color:#C6432B;">{{ m.name }}</a>
           <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.8vw,13px);letter-spacing:.06em;color:rgba(234,231,223,.6);margin-top:6px;">{{ m.author }}</div>
-          <div dc-html="{{ m.review }}" style="max-width:60ch;margin:clamp(12px,2.2vh,20px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
+          <div style="max-width:60ch;margin:clamp(12px,2.2vh,20px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;">{{ m.snippet }}</div>
         </div>
       </sc-for>
     </section>
@@ -56,10 +56,19 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
+function firstSentence(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html || '';
+  const t = (d.textContent || '').replace(/\s+/g, ' ').trim();
+  const m = t.match(/^.*?[.!?](?=\s|$)/);
+  return m ? m[0] : t;
+}
 class Component extends DCLogic {
   state = { films: [] };
   componentDidMount() {
-    fetch('/api/movies').then(r => r.json()).then(films => this.setState({ films })).catch(() => {});
+    fetch('/api/movies').then(r => r.json())
+      .then(films => this.setState({ films: films.map(m => ({ ...m, snippet: firstSentence(m.review) })) }))
+      .catch(() => {});
     // React drops the `muted` attribute; force the DOM property instead (survives re-renders)
     const mute = () => document.querySelectorAll('video').forEach(v => { v.muted = true; });
     mute();
