@@ -82,10 +82,11 @@ class Writing(Base):
     photo: Mapped[str] = mapped_column(String(500), default="")
     title: Mapped[str] = mapped_column(String(300), default="")
     text: Mapped[str] = mapped_column(Text, default="")
+    featured: Mapped[int] = mapped_column(Integer, default=0)  # show on homepage
 
     def to_dict(self):
         return {"id": self.id, "photo": self.photo, "title": self.title,
-                "text": self.text}
+                "text": self.text, "featured": self.featured}
 
 
 class Book(Base):
@@ -95,10 +96,11 @@ class Book(Base):
     author: Mapped[str] = mapped_column(String(300), default="")
     name: Mapped[str] = mapped_column(String(300), default="")
     review: Mapped[str] = mapped_column(Text, default="")
+    featured: Mapped[int] = mapped_column(Integer, default=0)  # show on homepage
 
     def to_dict(self):
         return {"id": self.id, "cover": self.cover, "author": self.author,
-                "name": self.name, "review": self.review}
+                "name": self.name, "review": self.review, "featured": self.featured}
 
 
 class Movie(Base):
@@ -108,10 +110,11 @@ class Movie(Base):
     name: Mapped[str] = mapped_column(String(300), default="")
     author: Mapped[str] = mapped_column(String(300), default="")
     review: Mapped[str] = mapped_column(Text, default="")
+    featured: Mapped[int] = mapped_column(Integer, default=0)  # show on homepage
 
     def to_dict(self):
         return {"id": self.id, "video": self.video, "name": self.name,
-                "author": self.author, "review": self.review}
+                "author": self.author, "review": self.review, "featured": self.featured}
 
 
 class Project(Base):
@@ -121,6 +124,7 @@ class Project(Base):
     release_date: Mapped[str] = mapped_column(String(100), default="")
     description: Mapped[str] = mapped_column(Text, default="")
     skills: Mapped[str] = mapped_column(Text, default="[]")  # JSON list
+    featured: Mapped[int] = mapped_column(Integer, default=0)  # show on homepage
 
     def to_dict(self):
         try:
@@ -129,7 +133,8 @@ class Project(Base):
             skills = []
         return {"id": self.id, "title": self.title,
                 "release_date": self.release_date,
-                "description": self.description, "skills": skills}
+                "description": self.description, "skills": skills,
+                "featured": self.featured}
 
 
 class Note(Base):
@@ -157,24 +162,30 @@ Base.metadata.create_all(engine)
 
 
 def _ensure_columns():
-    # no migration framework; add any About columns missing from an older DB
+    # no migration framework; add columns missing from an older DB
     from sqlalchemy import inspect, text as sqltext
-    have = {c["name"] for c in inspect(engine).get_columns("about")}
+    insp = inspect(engine)
     with engine.begin() as conn:
-        for col in ("location",):
-            if col not in have:
+        have = {c["name"] for c in insp.get_columns("about")}
+        if "location" not in have:
+            conn.execute(sqltext(
+                "ALTER TABLE about ADD COLUMN location VARCHAR DEFAULT ''"))
+        # homepage "featured" flag on the collections shown on the index
+        for tbl in ("writing", "book", "movie", "project"):
+            cols = {c["name"] for c in insp.get_columns(tbl)}
+            if "featured" not in cols:
                 conn.execute(sqltext(
-                    f'ALTER TABLE about ADD COLUMN {col} VARCHAR DEFAULT \'\''))
+                    f"ALTER TABLE {tbl} ADD COLUMN featured INTEGER DEFAULT 0"))
 
 
 _ensure_columns()
 
 # section name -> (model, ordered field list). About is handled separately.
 COLLECTIONS = {
-    "writing": (Writing, ["photo", "title", "text"]),
-    "books": (Book, ["cover", "author", "name", "review"]),
-    "movies": (Movie, ["video", "name", "author", "review"]),
-    "projects": (Project, ["title", "release_date", "description", "skills"]),
+    "writing": (Writing, ["photo", "title", "text", "featured"]),
+    "books": (Book, ["cover", "author", "name", "review", "featured"]),
+    "movies": (Movie, ["video", "name", "author", "review", "featured"]),
+    "projects": (Project, ["title", "release_date", "description", "skills", "featured"]),
     "notes": (Note, ["text"]),
     "links": (Link, ["label", "value", "url"]),
 }
@@ -367,6 +378,11 @@ async def movie_detail(item_id: int):
 @app.get("/writing/{item_id:int}")
 async def writing_detail(item_id: int):
     return _serve(FRONTEND, "WritingDetail.dc.html")
+
+
+@app.get("/books/{item_id:int}")
+async def book_detail(item_id: int):
+    return _serve(FRONTEND, "BookDetail.dc.html")
 
 
 @app.get("/{name:path}")

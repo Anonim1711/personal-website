@@ -63,16 +63,16 @@ const SECTIONS = ['about','writing','books','movies','projects','notes','links']
 // field -> input kind. 'file-image' / 'file-video' post to /api/upload.
 const SCHEMA = {
   about:    [['photo','file-image'],['text','textarea'],['location','text']],
-  writing:  [['photo','file-image'],['title','text'],['text','textarea']],
-  books:    [['cover','file-image'],['name','text'],['author','text'],['review','textarea']],
-  movies:   [['video','file-video'],['name','text'],['author','text'],['review','textarea']],
-  projects: [['title','text'],['release_date','text'],['description','textarea'],['skills','list']],
+  writing:  [['photo','file-image'],['title','text'],['text','textarea'],['featured','checkbox']],
+  books:    [['cover','file-image'],['name','text'],['author','text'],['review','textarea'],['featured','checkbox']],
+  movies:   [['video','file-video'],['name','text'],['author','text'],['review','textarea'],['featured','checkbox']],
+  projects: [['title','text'],['release_date','text'],['description','textarea'],['skills','list'],['featured','checkbox']],
   notes:    [['text','textarea']],
   links:    [['label','text'],['value','text'],['url','text']],
 };
 const LABELS = {photo:'Photo',cover:'Cover',video:'Video',text:'Text',title:'Title',name:'Name',
   author:'Author',review:'Review',description:'Description',release_date:'Release date',
-  skills:'Skills (comma-separated)',location:'Location',
+  skills:'Skills (comma-separated)',location:'Location',featured:'Feature on homepage',
   label:'Label (e.g. Telegram)',value:'Display text (e.g. @usmon)',url:'Link URL (e.g. https://t.me/usmon)'};
 let current = 'about';
 
@@ -116,6 +116,7 @@ async function start(){
 function fieldInput(field, kind, value){
   const id='f_'+field;
   if(kind==='textarea') return `<textarea id="${id}">${esc(value||'')}</textarea>`;
+  if(kind==='checkbox') return `<input type="checkbox" id="${id}" ${value?'checked':''} style="width:auto;vertical-align:middle;">`;
   if(kind==='list') return `<input id="${id}" value="${esc((value||[]).join(', '))}">`;
   if(kind==='file-image'||kind==='file-video'){
     const accept = kind==='file-image'?'image/*':'video/*';
@@ -163,6 +164,7 @@ function collect(section, container){
   for(const [field,kind] of SCHEMA[section]){
     const el=container.querySelector('#f_'+field); if(!el) continue;
     if(kind==='list') out[field]=el.value.split(',').map(s=>s.trim()).filter(Boolean);
+    else if(kind==='checkbox') out[field]= el.checked ? 1 : 0;
     else if(kind==='textarea') out[field]= editors.has(el) ? editors.get(el).getData() : el.value;
     else out[field]=el.value;
   }

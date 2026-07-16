@@ -83,15 +83,15 @@
         <a href="/writing" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">All writing →</a>
       </div>
       <sc-for list="{{ writingFeat }}" as="w" hint-placeholder-count="1">
-        <a href="/writing" style="display:block;color:inherit;" style-hover="opacity:.82;">
+        <a href="/writing/{{ w.id }}" style="display:block;color:inherit;" style-hover="opacity:.82;">
           <div style="font-weight:600;font-size:clamp(2rem,8.5vw,4.4rem);letter-spacing:-.03em;line-height:.98;max-width:16ch;">{{ w.title }}</div>
-          <div dc-html="{{ w.text }}" style="max-width:56ch;margin:clamp(18px,3vh,28px) 0 0;font-size:clamp(1rem,3.8vw,1.25rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
+          <div style="max-width:56ch;margin:clamp(18px,3vh,28px) 0 0;font-size:clamp(1rem,3.8vw,1.25rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;">{{ w.snippet }}</div>
           <div style="margin-top:clamp(18px,3vh,26px);font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;">Read the essay →</div>
         </a>
       </sc-for>
       <div style="margin-top:clamp(36px,6vh,60px);border-top:1px solid rgba(234,231,223,.14);">
         <sc-for list="{{ writingRest }}" as="w" hint-placeholder-count="2">
-          <a href="/writing" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;color:inherit;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);" style-hover="opacity:.6;"><span>{{ w.title }}</span></a>
+          <a href="/writing/{{ w.id }}" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;color:inherit;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);" style-hover="opacity:.6;"><span>{{ w.title }}</span></a>
         </sc-for>
       </div>
     </section>
@@ -110,7 +110,8 @@
             <div style="font-family:'Space Mono',monospace;font-size:clamp(8px,2vw,10px);letter-spacing:.12em;text-transform:uppercase;color:#C6432B;">Current favourite</div>
             <div style="font-weight:600;font-size:clamp(1.05rem,3.4vw,1.7rem);letter-spacing:-.02em;line-height:1.02;">{{ bookName }}</div>
             <div style="font-size:clamp(.82rem,2.6vw,1rem);color:rgba(234,231,223,.6);">{{ bookAuthor }}</div>
-            <div dc-html="{{ bookReview }}" style="font-size:clamp(.78rem,2.3vw,.95rem);line-height:1.4;color:rgba(234,231,223,.68);text-wrap:pretty;"></div>
+            <div style="font-size:clamp(.78rem,2.3vw,.95rem);line-height:1.4;color:rgba(234,231,223,.68);text-wrap:pretty;">{{ bookReview }}</div>
+            <a href="/books/{{ bookId }}" style="font-family:'Space Mono',monospace;font-size:clamp(8px,2vw,10px);letter-spacing:.1em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">Read the review →</a>
           </div>
           <div ref="{{ bookCoverRef }}" style="position:absolute;right:0;top:0;width:50%;height:100%;transform-origin:left center;transform:rotateY(0deg);transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.2,.8,.2,1);will-change:transform;">
             <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(150deg,#1c1d20,#141416);border:1px solid rgba(234,231,223,.16);box-shadow:0 26px 64px rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(13px,2.6vw,20px);overflow:hidden;">
@@ -134,7 +135,7 @@
       </div>
       <div style="margin-top:clamp(30px,5vh,52px);border-top:1px solid rgba(234,231,223,.14);">
         <sc-for list="{{ bookRest }}" as="b" hint-placeholder-count="2">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);"><span>{{ b.name }} · {{ b.author }}</span></div>
+          <a href="/books/{{ b.id }}" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;color:inherit;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);" style-hover="opacity:.6;"><span>{{ b.name }} · {{ b.author }}</span></a>
         </sc-for>
       </div>
     </section>
@@ -161,10 +162,11 @@
           </div>
         </sc-if>
       </div>
-      <div dc-html="{{ movieReview }}" style="max-width:56ch;margin:clamp(20px,3.5vh,30px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
+      <div style="max-width:56ch;margin:clamp(20px,3.5vh,30px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;">{{ movieReview }}</div>
+      <a href="/movies/{{ movieId }}" style="display:inline-block;margin-top:clamp(14px,2.5vh,20px);font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">Watch the film →</a>
       <div style="margin-top:clamp(28px,5vh,48px);border-top:1px solid rgba(234,231,223,.14);">
         <sc-for list="{{ movieRest }}" as="m" hint-placeholder-count="2">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);"><span>{{ m.name }} · {{ m.author }}</span></div>
+          <a href="/movies/{{ m.id }}" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;color:inherit;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);" style-hover="opacity:.6;"><span>{{ m.name }} · {{ m.author }}</span></a>
         </sc-for>
       </div>
     </section>
@@ -253,6 +255,13 @@
   &quot;reduceMotion&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Motion&quot; },
   &quot;clock24h&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Display&quot; }
 }">
+function firstSentence(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html || '';
+  const t = (d.textContent || '').replace(/\s+/g, ' ').trim();
+  const m = t.match(/^.*?[.!?](?=\s|$)/);
+  return m ? m[0] : t;
+}
 class Component extends DCLogic {
   facts = [
     { label: 'Origin', fact: 'Born and raised in Tashkent, Uzbekistan.' },
@@ -615,20 +624,25 @@ class Component extends DCLogic {
     const blockVals = this.facts.map(f => ({ label: f.label, fact: f.fact }));
     const writing = this.state.writing || [], books = this.state.books || [];
     const movies = this.state.movies || [], projects = this.state.projects || [], notes = this.state.notes || [];
-    const bk = books[0] || { name: '', author: '', review: '', cover: '' };
-    const mv = movies[0] || { name: '', author: '', review: '', video: '' };
+    // featured pick: the item flagged in admin, else the most recent; rest = the next two others
+    const pick = arr => arr.find(x => x.featured) || arr[0] || {};
+    const rest = (arr, feat) => arr.filter(x => x.id !== feat.id).slice(0, 2);
+    const fw = pick(writing);
+    const bk = pick(books);
+    const mv = pick(movies);
+    const fp = pick(projects);
     const a = this.state.about || {};
     const links = (this.state.links || []).map(l => ({
       label: l.label || '', value: l.value || l.url || '', href: l.url || '#'
     }));
     return {
       links: links, location: a.location || '',
-      writingFeat: writing.slice(0, 1), writingRest: writing.slice(1, 3),
-      bookName: bk.name, bookAuthor: bk.author, bookReview: bk.review,
-      bookCover: bk.cover ? [bk.cover] : [], bookRest: books.slice(1, 3),
-      movieName: mv.name, movieAuthor: mv.author, movieReview: mv.review,
-      movieVideo: mv.video, movieRest: movies.slice(1, 3),
-      projectFeat: projects.slice(0, 1), notesList: notes.slice(0, 3),
+      writingFeat: fw.id ? [{ ...fw, snippet: firstSentence(fw.text) }] : [], writingRest: rest(writing, fw),
+      bookName: bk.name, bookAuthor: bk.author, bookReview: firstSentence(bk.review), bookId: bk.id,
+      bookCover: bk.cover ? [bk.cover] : [], bookRest: rest(books, bk),
+      movieName: mv.name, movieAuthor: mv.author, movieReview: firstSentence(mv.review), movieId: mv.id,
+      movieVideo: mv.video, movieRest: rest(movies, mv),
+      projectFeat: fp.id ? [fp] : [], notesList: notes.slice(0, 3),
       rootRef: this.rootRef, overlayRef: this.overlayRef, counterRef: this.counterRef,
       barRef: this.barRef, clockRef: this.clockRef, glowRef: this.glowRef,
       hudRef: this.hudRef, ringRef: this.ringRef, ringLabelRef: this.ringLabelRef,
