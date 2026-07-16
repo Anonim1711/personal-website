@@ -130,11 +130,16 @@ function fieldInput(field, kind, value){
 }
 async function onUpload(inp, targetId, kind){
   const f=inp.files[0]; if(!f) return;
+  // Scope to THIS form's fields: ids collide between the add form and inline edit
+  // forms, so getElementById would target the wrong (first) one. The hidden input
+  // and the preview div are the file input's siblings (see fieldInput).
+  const hidden = inp.previousElementSibling;
+  const prevBox = inp.nextElementSibling;
   inp.disabled=true;
   try{
     const url=await uploadFile(f);
-    document.getElementById(targetId).value=url;
-    document.getElementById(targetId+'_prev').innerHTML = kind==='file-image'
+    hidden.value=url;
+    prevBox.innerHTML = kind==='file-image'
       ? `<img class="thumb" src="${esc(url)}">` : `<video class="thumb" src="${esc(url)}" muted></video>`;
   }catch(e){ alert('Upload failed'); } finally{ inp.disabled=false; }
 }
