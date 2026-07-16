@@ -110,7 +110,7 @@
             <div style="font-family:'Space Mono',monospace;font-size:clamp(8px,2vw,10px);letter-spacing:.12em;text-transform:uppercase;color:#C6432B;">Current favourite</div>
             <div style="font-weight:600;font-size:clamp(1.05rem,3.4vw,1.7rem);letter-spacing:-.02em;line-height:1.02;">{{ bookName }}</div>
             <div style="font-size:clamp(.82rem,2.6vw,1rem);color:rgba(234,231,223,.6);">{{ bookAuthor }}</div>
-            <div style="font-size:clamp(.78rem,2.3vw,.95rem);line-height:1.4;color:rgba(234,231,223,.68);text-wrap:pretty;white-space:pre-wrap;">{{ bookReview }}</div>
+            <div dc-html="{{ bookReview }}" style="font-size:clamp(.78rem,2.3vw,.95rem);line-height:1.4;color:rgba(234,231,223,.68);text-wrap:pretty;"></div>
           </div>
           <div ref="{{ bookCoverRef }}" style="position:absolute;right:0;top:0;width:50%;height:100%;transform-origin:left center;transform:rotateY(0deg);transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.2,.8,.2,1);will-change:transform;">
             <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(150deg,#1c1d20,#141416);border:1px solid rgba(234,231,223,.16);box-shadow:0 26px 64px rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(13px,2.6vw,20px);overflow:hidden;">
@@ -161,7 +161,7 @@
           </div>
         </sc-if>
       </div>
-      <p style="max-width:56ch;margin:clamp(20px,3.5vh,30px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;white-space:pre-wrap;">{{ movieReview }}</p>
+      <div dc-html="{{ movieReview }}" style="max-width:56ch;margin:clamp(20px,3.5vh,30px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;"></div>
       <div style="margin-top:clamp(28px,5vh,48px);border-top:1px solid rgba(234,231,223,.14);">
         <sc-for list="{{ movieRest }}" as="m" hint-placeholder-count="2">
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);"><span>{{ m.name }} · {{ m.author }}</span></div>
