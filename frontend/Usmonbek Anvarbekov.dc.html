@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{background:#0B0B0C;color:#EAE7DF;font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+    a{color:#C6432B;text-decoration:none;}
+    a:hover{color:#EAE7DF;}
+    ::selection{background:#C6432B;color:#0B0B0C;}
+    @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    @keyframes blink{50%{opacity:0;}}
+    @keyframes toastin{from{opacity:0;transform:translate(-50%,16px);}to{opacity:1;transform:translate(-50%,0);}}
+    @keyframes factin{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  </style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#0B0B0C;color:#EAE7DF;overflow:hidden;">
+
+  <canvas ref="{{ particleRef }}" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(234,231,223,.04) 1px,transparent 1px);background-size:clamp(64px,20vw,132px) 100%;"></div>
+  <div ref="{{ glowRef }}" aria-hidden="true" style="position:fixed;top:0;left:0;width:620px;height:620px;margin:-310px 0 0 -310px;border-radius:50%;background:radial-gradient(circle,rgba(198,67,43,.16),transparent 62%);pointer-events:none;z-index:1;opacity:0;transition:opacity .5s ease;will-change:transform;"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px clamp(16px,4vw,40px) 26px;background:linear-gradient(to bottom,#0B0B0C 52%,rgba(11,11,12,.72) 78%,rgba(11,11,12,0));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);pointer-events:none;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.08em;color:rgba(234,231,223,.82);text-transform:uppercase;">
+    <span>Usmonbek&nbsp;Anvarbekov</span>
+    <span style="display:flex;gap:clamp(14px,4vw,28px);align-items:center;">
+      <a href="/about" style="pointer-events:auto;color:rgba(234,231,223,.82);display:inline-flex;align-items:center;gap:7px;" style-hover="color:#C6432B;"><span style="width:6px;height:6px;background:#C6432B;border-radius:50%;display:inline-block;"></span>About</a>
+      <span style="display:flex;gap:8px;align-items:center;"><span style="opacity:.55;">Local</span><span ref="{{ clockRef }}" style="font-variant-numeric:tabular-nums;">--:--:--</span></span>
+    </span>
+  </header>
+
+  <main ref="{{ mainRef }}" style="position:relative;z-index:2;">
+
+    <section style="position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:clamp(92px,14vh,150px) clamp(16px,4vw,40px) clamp(36px,7vh,72px);">
+      
+      <h1 style="margin:0;font-weight:500;line-height:.84;letter-spacing:-.035em;font-size:clamp(3.1rem,15vw,11rem);text-wrap:balance;">
+        <span data-reveal="80" style="display:block;">Second</span>
+        <span data-reveal="160" style="display:block;color:transparent;-webkit-text-stroke:1.5px #EAE7DF;">Brain</span>
+      </h1>
+      <p data-reveal="300" style="max-width:42ch;margin:clamp(24px,5vh,44px) 0 0;font-size:clamp(1rem,4vw,1.35rem);line-height:1.5;color:rgba(234,231,223,.7);text-wrap:pretty;">A living archive of what I read, watch, build and think — kept in the open. Wander through the sections below.</p>
+      <div data-reveal="420" style="margin-top:auto;padding-top:clamp(30px,6vh,64px);display:flex;justify-content:space-between;align-items:flex-end;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.1em;text-transform:uppercase;color:rgba(234,231,223,.55);">
+        <span>Scroll to explore <span style="display:inline-block;animation:blink 1.6s steps(1) infinite;color:#C6432B;">↓</span></span>
+        <span>05 Sections</span>
+      </div>
+    </section>
+
+    <div data-reveal="220" style="overflow:hidden;border-top:1px solid rgba(234,231,223,.14);border-bottom:1px solid rgba(234,231,223,.14);padding:clamp(11px,2vh,18px) 0;">
+      <div style="display:flex;white-space:nowrap;width:max-content;animation:marquee 26s linear infinite;font-weight:600;font-size:clamp(1.25rem,5vw,2.4rem);letter-spacing:-.02em;text-transform:uppercase;will-change:transform;">
+        <span style="display:flex;align-items:center;">
+          <span style="padding:0 clamp(18px,4vw,38px);">About</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Writing</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Books</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Movies</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Projects</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Notes</span><span style="color:#C6432B;">◆</span>
+        </span>
+        <span aria-hidden="true" style="display:flex;align-items:center;">
+          <span style="padding:0 clamp(18px,4vw,38px);">About</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Writing</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Books</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Movies</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Projects</span><span style="color:#C6432B;">◆</span>
+          <span style="padding:0 clamp(18px,4vw,38px);">Notes</span><span style="color:#C6432B;">◆</span>
+        </span>
+      </div>
+    </div>
+
+    <section data-section="writing" data-screen-label="Writing" style="padding:clamp(64px,12vh,120px) clamp(16px,4vw,40px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(234,231,223,.14);padding-bottom:clamp(16px,3vh,24px);margin-bottom:clamp(28px,5vh,48px);">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,3vw,24px);">
+          <span style="font-family:'Space Mono',monospace;font-size:clamp(11px,3vw,14px);color:rgba(234,231,223,.5);">01</span>
+          <a href="/writing" style="color:inherit;" style-hover="color:#C6432B;"><h2 style="margin:0;font-weight:600;font-size:clamp(1.9rem,7.5vw,3.2rem);letter-spacing:-.02em;line-height:1;">Writing</h2></a>
+        </div>
+        <a href="/writing" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">All writing →</a>
+      </div>
+      <sc-for list="{{ writingFeat }}" as="w" hint-placeholder-count="1">
+        <a href="/writing" style="display:block;color:inherit;" style-hover="opacity:.82;">
+          <div style="font-weight:600;font-size:clamp(2rem,8.5vw,4.4rem);letter-spacing:-.03em;line-height:.98;max-width:16ch;">{{ w.title }}</div>
+          <p style="max-width:56ch;margin:clamp(18px,3vh,28px) 0 0;font-size:clamp(1rem,3.8vw,1.25rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;white-space:pre-wrap;">{{ w.text }}</p>
+          <div style="margin-top:clamp(18px,3vh,26px);font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;">Read the essay →</div>
+        </a>
+      </sc-for>
+      <div style="margin-top:clamp(36px,6vh,60px);border-top:1px solid rgba(234,231,223,.14);">
+        <sc-for list="{{ writingRest }}" as="w" hint-placeholder-count="2">
+          <a href="/writing" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;color:inherit;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);" style-hover="opacity:.6;"><span>{{ w.title }}</span></a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-section="books" data-screen-label="Books" style="padding:clamp(64px,12vh,120px) clamp(16px,4vw,40px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(234,231,223,.14);padding-bottom:clamp(16px,3vh,24px);margin-bottom:clamp(28px,5vh,48px);">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,3vw,24px);">
+          <span style="font-family:'Space Mono',monospace;font-size:clamp(11px,3vw,14px);color:rgba(234,231,223,.5);">02</span>
+          <a href="/books" style="color:inherit;" style-hover="color:#C6432B;"><h2 style="margin:0;font-weight:600;font-size:clamp(1.9rem,7.5vw,3.2rem);letter-spacing:-.02em;line-height:1;">Books</h2></a>
+        </div>
+        <a href="/books" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">Open library →</a>
+      </div>
+      <div style="display:flex;justify-content:center;padding:clamp(6px,2vh,24px) 0 clamp(4px,2vh,20px);">
+        <div data-book="" style="position:relative;width:min(100%,calc(clamp(150px,42vw,208px) * 2));height:calc(clamp(150px,42vw,208px) * 1.42);perspective:1900px;">
+          <div style="position:absolute;right:0;top:0;width:50%;height:100%;background:#141414;border:1px solid rgba(234,231,223,.14);box-shadow:inset 26px 0 46px -34px rgba(0,0,0,.95);padding:clamp(13px,2.5vw,22px);display:flex;flex-direction:column;justify-content:center;gap:clamp(7px,1.4vw,11px);">
+            <div style="font-family:'Space Mono',monospace;font-size:clamp(8px,2vw,10px);letter-spacing:.12em;text-transform:uppercase;color:#C6432B;">Current favourite</div>
+            <div style="font-weight:600;font-size:clamp(1.05rem,3.4vw,1.7rem);letter-spacing:-.02em;line-height:1.02;">{{ bookName }}</div>
+            <div style="font-size:clamp(.82rem,2.6vw,1rem);color:rgba(234,231,223,.6);">{{ bookAuthor }}</div>
+            <div style="font-size:clamp(.78rem,2.3vw,.95rem);line-height:1.4;color:rgba(234,231,223,.68);text-wrap:pretty;white-space:pre-wrap;">{{ bookReview }}</div>
+          </div>
+          <div ref="{{ bookCoverRef }}" style="position:absolute;right:0;top:0;width:50%;height:100%;transform-origin:left center;transform:rotateY(0deg);transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.2,.8,.2,1);will-change:transform;">
+            <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(150deg,#1c1d20,#141416);border:1px solid rgba(234,231,223,.16);box-shadow:0 26px 64px rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(13px,2.6vw,20px);overflow:hidden;">
+              <sc-for list="{{ bookCover }}" as="src" hint-placeholder-count="0">
+                <img src="{{ src }}" alt="{{ bookName }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+              </sc-for>
+              <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:#C6432B;z-index:1;"></div>
+              <div style="position:relative;z-index:1;padding-left:6px;margin-top:auto;">
+                <div style="width:clamp(38px,9vw,56px);height:clamp(38px,9vw,56px);border:2px solid #C6432B;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(12px,2.4vw,18px);"><div style="width:58%;height:58%;border:2px solid rgba(234,231,223,.45);border-radius:50%;"></div></div>
+                <div style="font-weight:700;font-size:clamp(.9rem,2.7vw,1.4rem);letter-spacing:-.01em;line-height:1;text-transform:uppercase;">{{ bookName }}</div>
+              </div>
+              <div style="position:relative;z-index:1;font-family:'Space Mono',monospace;font-size:clamp(7px,1.9vw,9.5px);letter-spacing:.1em;text-transform:uppercase;color:rgba(234,231,223,.7);padding-left:6px;">{{ bookAuthor }}</div>
+            </div>
+            <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:#1b1a17;border:1px solid rgba(234,231,223,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;">
+              <div style="color:#C6432B;font-size:1.4rem;line-height:1;">◆</div>
+              <div style="font-family:'Space Mono',monospace;font-size:clamp(8px,2.1vw,10px);letter-spacing:.22em;text-transform:uppercase;color:rgba(234,231,223,.55);">Ex Libris</div>
+              <div style="font-size:clamp(.85rem,2.6vw,1.05rem);font-weight:500;">Usmonbek Anvarbekov</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:clamp(30px,5vh,52px);border-top:1px solid rgba(234,231,223,.14);">
+        <sc-for list="{{ bookRest }}" as="b" hint-placeholder-count="2">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);"><span>{{ b.name }} · {{ b.author }}</span></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-section="movies" data-screen-label="Movies" style="padding:clamp(64px,12vh,120px) clamp(16px,4vw,40px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(234,231,223,.14);padding-bottom:clamp(16px,3vh,24px);margin-bottom:clamp(28px,5vh,48px);">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,3vw,24px);">
+          <span style="font-family:'Space Mono',monospace;font-size:clamp(11px,3vw,14px);color:rgba(234,231,223,.5);">03</span>
+          <a href="/movies" style="color:inherit;" style-hover="color:#C6432B;"><h2 style="margin:0;font-weight:600;font-size:clamp(1.9rem,7.5vw,3.2rem);letter-spacing:-.02em;line-height:1;">Movies</h2></a>
+        </div>
+        <a href="/movies" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">All films →</a>
+      </div>
+      <div style="position:relative;width:100%;max-width:820px;margin:0 auto;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(234,231,223,.14);background:transparent;">
+        <sc-if value="{{ movieVideo }}">
+          <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(135% 115% at 50% 74%,#EFA05B 0%,#CB6130 24%,#7d3a20 50%,#341a12 82%,#241210 100%);"></div>
+          <div aria-hidden="true" style="position:absolute;left:50%;bottom:12%;width:34%;padding-bottom:34%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,228,182,.9),rgba(255,205,150,0) 66%);filter:blur(4px);"></div>
+          <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:26%;height:1px;background:linear-gradient(to right,transparent,rgba(0,0,0,.35),transparent);"></div>
+          <div aria-hidden="true" style="position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.3) 1px,transparent 1px);background-size:3px 3px;mix-blend-mode:overlay;opacity:.5;"></div>
+          <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(120% 92% at 50% 42%,transparent 42%,rgba(11,11,12,.6) 100%);"></div>
+          <video src="{{ movieVideo }}" autoplay muted loop="true" playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(16px,4vw,40px);background:linear-gradient(to top,rgba(11,11,12,.86) 0%,rgba(11,11,12,.35) 38%,transparent 68%);pointer-events:none;">
+            <div style="font-weight:600;font-size:clamp(1.7rem,7vw,3.2rem);letter-spacing:-.02em;line-height:1;">{{ movieName }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:12px;font-family:'Space Mono',monospace;font-size:clamp(10px,2.8vw,13px);letter-spacing:.06em;color:rgba(234,231,223,.8);"><span>{{ movieAuthor }}</span></div>
+          </div>
+        </sc-if>
+      </div>
+      <p style="max-width:56ch;margin:clamp(20px,3.5vh,30px) 0 0;font-size:clamp(1rem,3.6vw,1.2rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;white-space:pre-wrap;">{{ movieReview }}</p>
+      <div style="margin-top:clamp(28px,5vh,48px);border-top:1px solid rgba(234,231,223,.14);">
+        <sc-for list="{{ movieRest }}" as="m" hint-placeholder-count="2">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(234,231,223,.1);font-size:clamp(1rem,3.6vw,1.2rem);"><span>{{ m.name }} · {{ m.author }}</span></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-section="projects" data-screen-label="Projects" style="padding:clamp(64px,12vh,120px) clamp(16px,4vw,40px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(234,231,223,.14);padding-bottom:clamp(16px,3vh,24px);margin-bottom:clamp(28px,5vh,48px);">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,3vw,24px);">
+          <span style="font-family:'Space Mono',monospace;font-size:clamp(11px,3vw,14px);color:rgba(234,231,223,.5);">04</span>
+          <a href="/projects" style="color:inherit;" style-hover="color:#C6432B;"><h2 style="margin:0;font-weight:600;font-size:clamp(1.9rem,7.5vw,3.2rem);letter-spacing:-.02em;line-height:1;">Projects</h2></a>
+        </div>
+        <a href="/projects" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">All projects →</a>
+      </div>
+      
+      <sc-for list="{{ projectFeat }}" as="p" hint-placeholder-count="1">
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,40px);align-items:flex-end;justify-content:space-between;margin-top:clamp(22px,4vh,34px);">
+          <div style="flex:1;min-width:min(100%,260px);">
+            <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
+              <div style="font-weight:600;font-size:clamp(1.6rem,6.5vw,2.6rem);letter-spacing:-.02em;line-height:1.05;">{{ p.title }}</div>
+              <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:rgba(234,231,223,.5);">{{ p.release_date }}</div>
+            </div>
+            <p style="max-width:48ch;margin:12px 0 0;font-size:clamp(.98rem,3.6vw,1.15rem);line-height:1.55;color:rgba(234,231,223,.72);text-wrap:pretty;white-space:pre-wrap;">{{ p.description }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;">
+              <sc-for list="{{ p.skills }}" as="sk" hint-placeholder-count="3">
+                <span style="font-family:'Space Mono',monospace;font-size:clamp(9px,2.4vw,11px);letter-spacing:.06em;text-transform:uppercase;color:rgba(234,231,223,.6);border:1px solid rgba(234,231,223,.16);padding:5px 10px;">{{ sk }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <a href="/projects" style="font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;white-space:nowrap;" style-hover="color:#EAE7DF;">Visit project →</a>
+        </div>
+      </sc-for>
+    </section>
+
+    <section data-section="notes" data-screen-label="Notes" style="padding:clamp(64px,12vh,120px) clamp(16px,4vw,40px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(234,231,223,.14);padding-bottom:clamp(16px,3vh,24px);margin-bottom:clamp(28px,5vh,48px);">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,3vw,24px);">
+          <span style="font-family:'Space Mono',monospace;font-size:clamp(11px,3vw,14px);color:rgba(234,231,223,.5);">05</span>
+          <a href="/notes" style="color:inherit;" style-hover="color:#C6432B;"><h2 style="margin:0;font-weight:600;font-size:clamp(1.9rem,7.5vw,3.2rem);letter-spacing:-.02em;line-height:1;">Notes</h2></a>
+        </div>
+        <a href="/notes" style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,13px);letter-spacing:.08em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">All notes →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(220px,80vw,300px),1fr));gap:12px;">
+        <sc-for list="{{ notesList }}" as="n" hint-placeholder-count="3">
+          <div style="border:1px solid rgba(234,231,223,.14);padding:clamp(20px,4vw,28px);display:flex;flex-direction:column;gap:16px;min-height:150px;">
+            <p style="margin:0;font-style:italic;font-size:clamp(1.05rem,3.8vw,1.25rem);line-height:1.4;text-wrap:pretty;white-space:pre-wrap;">{{ n.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <footer data-reveal="900" style="padding:clamp(56px,11vh,120px) clamp(16px,4vw,40px) clamp(40px,8vh,72px);border-top:1px solid rgba(234,231,223,.14);">
+      <div style="font-weight:600;font-size:clamp(1.8rem,8vw,3.4rem);letter-spacing:-.02em;line-height:1;margin-bottom:clamp(28px,5vh,48px);">Say hello<span style="color:#C6432B;">.</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px 40px;">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="3">
+          <a href="{{ l.href }}" style="display:inline-flex;align-items:baseline;gap:10px;color:inherit;font-size:clamp(1.05rem,4vw,1.5rem);font-weight:500;letter-spacing:-.01em;" style-hover="color:#C6432B;"><span style="font-family:'Space Mono',monospace;font-size:.55em;letter-spacing:.1em;text-transform:uppercase;color:#C6432B;">{{ l.label }}</span>{{ l.value }}</a>
+        </sc-for>
+      </div>
+      <div style="margin-top:clamp(36px,7vh,64px);display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.08em;text-transform:uppercase;color:rgba(234,231,223,.45);">
+        <span>© 2026 Usmonbek Anvarbekov</span>
+        <span>{{ location }}</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <div ref="{{ overlayRef }}" style="position:fixed;inset:0;z-index:200;background:#0B0B0C;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(18px,4vw,44px);transition:transform 1s cubic-bezier(.85,0,.15,1);will-change:transform;">
+    <div style="display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.1em;text-transform:uppercase;color:rgba(234,231,223,.55);">
+      <span>Usmonbek Anvarbekov</span><span>Personal Index</span>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:.05em;line-height:.78;">
+      <span ref="{{ counterRef }}" style="font-weight:600;font-size:clamp(5rem,32vw,21rem);letter-spacing:-.045em;font-variant-numeric:tabular-nums;">00</span>
+      <span style="color:#C6432B;font-weight:600;font-size:clamp(1.6rem,8vw,5rem);padding-bottom:.15em;">%</span>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.1em;text-transform:uppercase;color:rgba(234,231,223,.55);margin-bottom:12px;">
+        <span>Loading index</span><span>Please wait</span>
+      </div>
+      <div style="height:2px;background:rgba(234,231,223,.14);width:100%;overflow:hidden;"><div ref="{{ barRef }}" style="height:100%;background:#C6432B;width:0%;"></div></div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot; },
+  &quot;playIntro&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Motion&quot; },
+  &quot;reduceMotion&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Motion&quot; },
+  &quot;clock24h&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Display&quot; }
+}">
+class Component extends DCLogic {
+  facts = [
+    { label: 'Origin', fact: 'Born and raised in Tashkent, Uzbekistan.' },
+    { label: 'Ritual', fact: 'Coffee, black, before anything else.' },
+    { label: 'Habit', fact: 'I keep one physical notebook for everything.' },
+    { label: 'Pace', fact: 'I think best on long, aimless walks.' },
+    { label: 'Genre', fact: 'Science fiction is my comfort reading.' },
+    { label: 'Why', fact: 'I build things mostly to understand them.' }
+  ];
+  state = { explored: [], toast: null, writing: [], books: [], movies: [], projects: [], notes: [], about: {}, links: [] };
+
+  overlayRef = React.createRef();
+  counterRef = React.createRef();
+  barRef = React.createRef();
+  clockRef = React.createRef();
+  glowRef = React.createRef();
+  rootRef = React.createRef();
+  hudRef = React.createRef();
+  ringRef = React.createRef();
+  ringLabelRef = React.createRef();
+  splineRef = React.createRef();
+  mainRef = React.createRef();
+  bookCoverRef = React.createRef();
+  particleRef = React.createRef();
+
+  sectionKeys = ['about', 'writing', 'books', 'movies', 'projects', 'notes', 'elsewhere'];
+
+  badgeDefs = [
+    { key: 'first', name: 'First Contact', desc: 'Reach any section', cond: c => c.explored.length >= 1 },
+    { key: 'writer', name: 'Wordsmith', desc: 'Reach Writing', cond: c => c.explored.includes('writing') },
+    { key: 'curator', name: 'Curator', desc: 'Reach Books', cond: c => c.explored.includes('books') },
+    { key: 'cinephile', name: 'Cinephile', desc: 'Reach Movies', cond: c => c.explored.includes('movies') },
+    { key: 'builder', name: 'Builder', desc: 'Reach Projects', cond: c => c.explored.includes('projects') },
+    { key: 'complete', name: 'Completionist', desc: 'Reach every section', cond: c => c.explored.length >= 7 }
+  ];
+
+  ctx(explored) {
+    return { explored: explored };
+  }
+  unlockedKeys(c) { return this.badgeDefs.filter(d => d.cond(c)).map(d => d.key); }
+
+  componentDidMount() {
+    const playIntro = this.props.playIntro ?? true;
+    const reduce = this.props.reduceMotion ?? false;
+    this.startClock();
+    this.setupPointer();
+    this.loadProgress();
+    this.loadContent();
+    if (!reduce) this.setupParticles();
+
+    const root = this.rootRef.current;
+    this.revealEls = root ? Array.from(root.querySelectorAll('[data-reveal]')) : [];
+    if (!reduce) {
+      this.revealEls.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(26px)';
+        el.style.transition = 'opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1)';
+      });
+    }
+
+    if (playIntro && !reduce) {
+      try { document.body.style.overflow = 'hidden'; } catch (e) {}
+      this.runIntro();
+    } else {
+      const ov = this.overlayRef.current;
+      if (ov) { ov.style.transition = 'none'; ov.style.transform = 'translateY(-100%)'; }
+      if (this.counterRef.current) this.counterRef.current.textContent = '100';
+      if (this.barRef.current) this.barRef.current.style.width = '100%';
+      this.reveal();
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._clock);
+    cancelAnimationFrame(this._raf);
+    if (this._pm) window.removeEventListener('pointermove', this._pm);
+    cancelAnimationFrame(this._pRaf);
+    if (this._pResize) window.removeEventListener('resize', this._pResize);
+    if (this._io) this._io.disconnect();
+    if (this._secIo) this._secIo.disconnect();
+    if (this._bookIo) this._bookIo.disconnect();
+    clearTimeout(this._flashT);
+    clearTimeout(this._toastT);
+    try { document.body.style.overflow = ''; } catch (e) {}
+  }
+
+  startClock() {
+    const h24 = this.props.clock24h ?? true;
+    const upd = () => {
+      const d = new Date();
+      const hh = d.getHours(), mm = d.getMinutes(), ss = d.getSeconds();
+      let s;
+      if (h24) {
+        s = [hh, mm, ss].map(n => String(n).padStart(2, '0')).join(':');
+      } else {
+        const ap = hh >= 12 ? 'PM' : 'AM';
+        let h = hh % 12; if (h === 0) h = 12;
+        s = String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0') + ' ' + ap;
+      }
+      if (this.clockRef.current) this.clockRef.current.textContent = s;
+    };
+    upd();
+    this._clock = setInterval(upd, 1000);
+  }
+
+  setupPointer() {
+    if (!window.matchMedia || !window.matchMedia('(pointer:fine)').matches) return;
+    this._pm = (e) => {
+      const g = this.glowRef.current;
+      if (g) { g.style.opacity = '1'; g.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)'; }
+      if (this._mouse) { this._mouse.x = e.clientX; this._mouse.y = e.clientY; this._mouse.has = true; }
+    };
+    window.addEventListener('pointermove', this._pm, { passive: true });
+  }
+
+  setupParticles() {
+    const canvas = this.particleRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const resize = () => {
+      this._pw = window.innerWidth; this._ph = window.innerHeight;
+      canvas.width = this._pw * dpr; canvas.height = this._ph * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      this._pCount = Math.max(28, Math.min(88, Math.round(this._pw * this._ph / 20000)));
+      this._parts = Array.from({ length: this._pCount }, () => ({
+        x: Math.random() * this._pw, y: Math.random() * this._ph,
+        vx: (Math.random() - 0.5) * 0.28, vy: (Math.random() - 0.5) * 0.28,
+        r: Math.random() * 1.4 + 0.9,
+        cream: Math.random() < 0.28
+      }));
+    };
+    resize();
+    this._pResize = resize;
+    window.addEventListener('resize', resize);
+    if (!this._mouse) this._mouse = { x: -999, y: -999, has: false };
+
+    const LINK = 132, MOUSE = 190;
+    const loop = () => {
+      const ps = this._parts, W = this._pw, H = this._ph, m = this._mouse;
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < ps.length; i++) {
+        const p = ps[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
+      }
+      for (let i = 0; i < ps.length; i++) {
+        const a = ps[i];
+        for (let j = i + 1; j < ps.length; j++) {
+          const b = ps[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < LINK * LINK) {
+            const al = (1 - Math.sqrt(d2) / LINK) * 0.34;
+            ctx.strokeStyle = 'rgba(198,67,43,' + al.toFixed(3) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+        if (m.has) {
+          const dx = a.x - m.x, dy = a.y - m.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < MOUSE * MOUSE) {
+            const al = (1 - Math.sqrt(d2) / MOUSE) * 0.5;
+            ctx.strokeStyle = 'rgba(234,231,223,' + al.toFixed(3) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(m.x, m.y); ctx.stroke();
+          }
+        }
+      }
+      for (let i = 0; i < ps.length; i++) {
+        const p = ps[i];
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.cream ? 'rgba(234,231,223,.5)' : 'rgba(198,67,43,.7)';
+        ctx.fill();
+      }
+      this._pRaf = requestAnimationFrame(loop);
+    };
+    this._pRaf = requestAnimationFrame(loop);
+  }
+
+  runIntro() {
+    const dur = 2600, start = performance.now();
+    const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = ease(t);
+      if (this.counterRef.current) this.counterRef.current.textContent = String(Math.round(e * 100)).padStart(2, '0');
+      if (this.barRef.current) this.barRef.current.style.width = (e * 100) + '%';
+      if (t < 1) { this._raf = requestAnimationFrame(tick); }
+      else { setTimeout(() => this.finishIntro(), 400); }
+    };
+    this._raf = requestAnimationFrame(tick);
+  }
+
+  finishIntro() {
+    const ov = this.overlayRef.current;
+    if (ov) ov.style.transform = 'translateY(-100%)';
+    try { document.body.style.overflow = ''; } catch (e) {}
+    setTimeout(() => this.reveal(), 260);
+  }
+
+  reveal() {
+    (this.revealEls || []).forEach(el => {
+      const d = parseFloat(el.getAttribute('data-reveal')) || 0;
+      setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, d);
+    });
+    this.initObservers();
+  }
+
+  initObservers() {
+    if (this._obsInit) return;
+    this._obsInit = true;
+    this.setupStatsAnim();
+    this.setupSectionObserver();
+    this.setupBookObserver();
+  }
+
+  setupSectionObserver() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    if (!('IntersectionObserver' in window)) { this.sectionKeys.forEach(k => this.markExplored(k)); return; }
+    const io = new IntersectionObserver((ents) => {
+      ents.forEach(en => {
+        if (!en.isIntersecting) return;
+        const k = en.target.getAttribute('data-section');
+        io.unobserve(en.target);
+        this.markExplored(k);
+      });
+    }, { threshold: 0.25 });
+    root.querySelectorAll('[data-section]').forEach(el => io.observe(el));
+    this._secIo = io;
+  }
+
+  setupBookObserver() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    const book = root.querySelector('[data-book]');
+    const cover = this.bookCoverRef.current;
+    if (!book || !cover) return;
+    if (!('IntersectionObserver' in window)) { cover.style.transform = 'rotateY(-158deg)'; return; }
+    const io = new IntersectionObserver((ents) => {
+      ents.forEach(en => {
+        const open = en.isIntersecting && en.intersectionRatio > 0.5;
+        cover.style.transform = open ? 'rotateY(-158deg)' : 'rotateY(0deg)';
+      });
+    }, { threshold: [0, 0.5, 1] });
+    io.observe(book);
+    this._bookIo = io;
+  }
+
+  markExplored(key) {
+    if (!key) return;
+    this.setState(s => {
+      if (s.explored.includes(key)) return null;
+      const before = this.unlockedKeys(this.ctx(s.explored));
+      const explored = s.explored.concat(key);
+      const after = this.unlockedKeys(this.ctx(explored));
+      const gained = after.filter(k => before.indexOf(k) === -1);
+      let toast = s.toast;
+      if (gained.length) {
+        const d = this.badgeDefs.find(x => x.key === gained[gained.length - 1]);
+        toast = d ? d.name : toast;
+        this.flashHud();
+        this.scheduleToastHide();
+      }
+      this.save(explored);
+      return { explored, toast };
+    });
+  }
+
+  loadContent() {
+    const g = s => fetch('/api/' + s).then(r => r.json()).catch(() => []);
+    Promise.all([g('writing'), g('books'), g('movies'), g('projects'), g('notes')])
+      .then(([writing, books, movies, projects, notes]) => this.setState({ writing, books, movies, projects, notes }));
+    fetch('/api/about').then(r => r.json()).then(about => this.setState({ about })).catch(() => {});
+    g('links').then(links => this.setState({ links }));
+  }
+
+  save(explored) {
+    try { localStorage.setItem('ua_progress_v2', JSON.stringify({ explored })); } catch (e) {}
+  }
+  loadProgress() {
+    try {
+      const raw = localStorage.getItem('ua_progress_v2');
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (Array.isArray(d.explored)) {
+        const explored = d.explored.filter(k => this.sectionKeys.includes(k)).filter((k, i, a) => a.indexOf(k) === i);
+        if (explored.length) this.setState({ explored });
+      }
+    } catch (e) {}
+  }
+
+  flashHud() {
+    const h = this.hudRef.current; if (!h) return;
+    h.style.transform = 'scale(1.08)';
+    clearTimeout(this._flashT);
+    this._flashT = setTimeout(() => { if (this.hudRef.current) this.hudRef.current.style.transform = 'scale(1)'; }, 280);
+  }
+  scheduleToastHide() {
+    clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast: null }), 2800);
+  }
+
+  setupStatsAnim() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    if (!('IntersectionObserver' in window)) { this.animateRing(); return; }
+    const io = new IntersectionObserver((ents) => {
+      ents.forEach(en => {
+        if (!en.isIntersecting) return;
+        const t = en.target;
+        if (t.hasAttribute('data-count')) this.animateCount(t);
+        if (t.hasAttribute('data-ring')) this.animateRing();
+        io.unobserve(t);
+      });
+    }, { threshold: 0.4 });
+    root.querySelectorAll('[data-count]').forEach(el => { el.__t = parseFloat(el.textContent) || 0; el.textContent = '0'; io.observe(el); });
+    const ring = root.querySelector('[data-ring]');
+    if (ring) io.observe(ring);
+    this._io = io;
+  }
+  animateCount(el) {
+    const target = el.__t || 0, dur = 1500, s = performance.now();
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const step = n => {
+      const t = Math.min(1, (n - s) / dur);
+      el.textContent = Math.round(ease(t) * target);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  animateRing() {
+    const c = this.ringRef.current, l = this.ringLabelRef.current;
+    if (!c) return;
+    let frac = 0;
+    if (l) { const m = l.textContent.match(/(\d+)\s*\/\s*(\d+)/); if (m && +m[2] > 0) frac = Math.min(1, +m[1] / +m[2]); }
+    c.style.strokeDashoffset = (326.73 * (1 - frac)).toFixed(2);
+  }
+
+  renderVals() {
+    const explored = this.state.explored;
+    const level = explored.length;
+    const c = this.ctx(explored);
+    const badges = this.badgeDefs.map(d => {
+      const u = d.cond(c);
+      return {
+        name: d.name, desc: d.desc, unlocked: u, locked: !u,
+        cardStyle: {
+          padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px',
+          border: '1px solid ' + (u ? '#C6432B' : 'rgba(234,231,223,.14)'),
+          opacity: u ? 1 : 0.45,
+          boxShadow: u ? '0 0 26px rgba(198,67,43,.16)' : 'none',
+          transition: 'opacity .5s ease, box-shadow .5s ease, border-color .5s ease'
+        }
+      };
+    });
+    const blockVals = this.facts.map(f => ({ label: f.label, fact: f.fact }));
+    const writing = this.state.writing || [], books = this.state.books || [];
+    const movies = this.state.movies || [], projects = this.state.projects || [], notes = this.state.notes || [];
+    const bk = books[0] || { name: '', author: '', review: '', cover: '' };
+    const mv = movies[0] || { name: '', author: '', review: '', video: '' };
+    const a = this.state.about || {};
+    const links = (this.state.links || []).map(l => ({
+      label: l.label || '', value: l.value || l.url || '', href: l.url || '#'
+    }));
+    return {
+      links: links, location: a.location || '',
+      writingFeat: writing.slice(0, 1), writingRest: writing.slice(1, 3),
+      bookName: bk.name, bookAuthor: bk.author, bookReview: bk.review,
+      bookCover: bk.cover ? [bk.cover] : [], bookRest: books.slice(1, 3),
+      movieName: mv.name, movieAuthor: mv.author, movieReview: mv.review,
+      movieVideo: mv.video, movieRest: movies.slice(1, 3),
+      projectFeat: projects.slice(0, 1), notesList: notes.slice(0, 3),
+      rootRef: this.rootRef, overlayRef: this.overlayRef, counterRef: this.counterRef,
+      barRef: this.barRef, clockRef: this.clockRef, glowRef: this.glowRef,
+      hudRef: this.hudRef, ringRef: this.ringRef, ringLabelRef: this.ringLabelRef,
+      bookCoverRef: this.bookCoverRef, particleRef: this.particleRef, splineRef: this.splineRef, mainRef: this.mainRef,
+      level: level, exploredLabel: level + '/7 Explored', toast: this.state.toast,
+      badges: badges, blocks: blockVals,
+      xpFillStyle: { display: 'block', height: '100%', width: (level / 7 * 100) + '%', background: '#C6432B', transition: 'width .6s cubic-bezier(.16,1,.3,1)' }
+    };
+  }
+}
+</script>
+</body>
+</html>

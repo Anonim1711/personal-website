@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./particles.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{background:#0B0B0C;color:#EAE7DF;font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+    a{color:#C6432B;text-decoration:none;}
+    a:hover{color:#EAE7DF;}
+    ::selection{background:#C6432B;color:#0B0B0C;}
+  </style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:transparent;color:#EAE7DF;overflow:hidden;">
+
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(234,231,223,.04) 1px,transparent 1px);background-size:clamp(64px,20vw,132px) 100%;"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px clamp(16px,4vw,40px) 26px;background:linear-gradient(to bottom,#0B0B0C 52%,rgba(11,11,12,.72) 78%,rgba(11,11,12,0));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.08em;color:rgba(234,231,223,.82);text-transform:uppercase;">
+    <a href="/" style="color:rgba(234,231,223,.82);display:inline-flex;align-items:center;gap:8px;" style-hover="color:#C6432B;"><span>←</span> Index</a>
+    <span style="opacity:.55;">About</span>
+  </header>
+
+  <main style="position:relative;z-index:2;">
+
+    <section style="padding:clamp(120px,20vh,220px) clamp(16px,4vw,40px) clamp(40px,7vh,80px);max-width:1180px;margin:0 auto;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.14em;text-transform:uppercase;color:rgba(234,231,223,.55);margin-bottom:clamp(22px,5vh,40px);">
+        <span style="width:8px;height:8px;background:#C6432B;border-radius:50%;display:inline-block;flex:none;"></span>
+        About
+      </div>
+      <h1 style="margin:0;font-weight:500;line-height:.86;letter-spacing:-.035em;font-size:clamp(2.8rem,12vw,8rem);text-wrap:balance;">
+        <span style="display:block;">Who I am,</span>
+        <span style="display:block;color:transparent;-webkit-text-stroke:1.4px #EAE7DF;">at length.</span>
+      </h1>
+    </section>
+
+    <article style="max-width:720px;margin:0 auto;padding:clamp(24px,5vh,48px) clamp(16px,4vw,40px) clamp(64px,12vh,120px);border-top:1px solid rgba(234,231,223,.14);">
+
+      <sc-for list="{{ photo }}" as="src" hint-placeholder-count="1">
+        <img src="{{ src }}" alt="Portrait" style="width:100%;max-height:520px;object-fit:cover;border:1px solid rgba(234,231,223,.14);margin:clamp(20px,4vh,40px) 0;">
+      </sc-for>
+
+      <p style="font-size:clamp(1.05rem,4vw,1.35rem);line-height:1.7;margin:clamp(20px,4vh,40px) 0 0;text-wrap:pretty;color:rgba(234,231,223,.9);white-space:pre-wrap;">{{ about.text }}</p>
+
+      <div style="margin-top:clamp(48px,8vh,80px);">
+        <a href="/" style="font-family:'Space Mono',monospace;font-size:clamp(11px,2.8vw,13px);letter-spacing:.06em;text-transform:uppercase;color:#C6432B;" style-hover="color:#EAE7DF;">← Back to the index</a>
+      </div>
+
+    </article>
+
+  </main>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { about: { text: '', photo: '' } };
+  componentDidMount() {
+    fetch('/api/about').then(r => r.json()).then(about => this.setState({ about: about || {} })).catch(() => {});
+  }
+  renderVals() {
+    const about = this.state.about || {};
+    return { about, photo: about.photo ? [about.photo] : [] };
+  }
+}
+</script>
+</body>
+</html>

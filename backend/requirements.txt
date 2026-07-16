@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+itsdangerous
+werkzeug
+sqlalchemy
+psycopg[binary]
+python-dotenv
+httpx

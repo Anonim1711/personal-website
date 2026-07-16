@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./particles.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{background:#0B0B0C;color:#EAE7DF;font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+    a{color:#C6432B;text-decoration:none;}
+    a:hover{color:#EAE7DF;}
+    ::selection{background:#C6432B;color:#0B0B0C;}
+  </style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:transparent;color:#EAE7DF;overflow:hidden;">
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(234,231,223,.04) 1px,transparent 1px);background-size:clamp(64px,20vw,132px) 100%;"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px clamp(16px,4vw,40px) 26px;background:linear-gradient(to bottom,#0B0B0C 52%,rgba(11,11,12,.72) 78%,rgba(11,11,12,0));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.08em;color:rgba(234,231,223,.82);text-transform:uppercase;">
+    <a href="/" style="color:rgba(234,231,223,.82);display:inline-flex;align-items:center;gap:8px;" style-hover="color:#C6432B;"><span>←</span> Index</a>
+    <span style="opacity:.55;">Books</span>
+  </header>
+
+  <main style="position:relative;z-index:2;max-width:1180px;margin:0 auto;">
+    <section style="padding:clamp(112px,18vh,200px) clamp(16px,4vw,40px) clamp(24px,5vh,44px);">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.14em;text-transform:uppercase;color:rgba(234,231,223,.55);margin-bottom:clamp(18px,4vh,32px);">
+        <span style="width:8px;height:8px;background:#C6432B;border-radius:50%;display:inline-block;flex:none;"></span>
+        02 — The Library · pull one out
+      </div>
+      <h1 style="margin:0;font-weight:500;line-height:.86;letter-spacing:-.035em;font-size:clamp(3rem,13vw,9rem);">Books</h1>
+    </section>
+
+    <!-- The shelf — books stand as spines; click one to swivel it out -->
+    <section style="padding:clamp(8px,2vh,20px) clamp(16px,4vw,40px) clamp(28px,5vh,44px);">
+      <div style="font-family:'Space Mono',monospace;font-size:clamp(10px,2.6vw,12px);letter-spacing:.14em;text-transform:uppercase;color:rgba(234,231,223,.5);margin-bottom:clamp(16px,3vh,24px);">The shelf — tap a book to pull it out</div>
+      <div style="display:flex;align-items:flex-end;justify-content:flex-start;gap:0;overflow-x:auto;overflow-y:hidden;padding:clamp(70px,12vh,120px) clamp(12px,4vw,48px) 20px;border-bottom:2px solid rgba(234,231,223,.16);">
+        <sc-for list="{{ shelf }}" as="s" hint-placeholder-count="8">
+          <div onClick="{{ s.onClick }}" style="{{ s.wrapStyle }}">
+            <div style="{{ s.groupStyle }}">
+              <!-- spine — the hard cover you see on the shelf, name printed on it -->
+              <div style="{{ s.spineStyle }}">
+                <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;font-size:13px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:88%;">{{ s.name }}</div>
+              </div>
+              <!-- front cover — hinged on the spine, swings open on click -->
+              <div style="{{ s.coverStyle }}">
+                <img src="{{ s.cover }}" alt="{{ s.name }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(to top,rgba(11,11,12,.92),transparent);">
+                  <div style="font-weight:700;font-size:1rem;letter-spacing:-.01em;line-height:1.05;text-transform:uppercase;">{{ s.name }}</div>
+                  <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,231,223,.7);margin-top:5px;">{{ s.author }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Selected book details -->
+    <section style="padding:clamp(20px,4vh,40px) clamp(16px,4vw,40px) clamp(72px,14vh,140px);max-width:640px;">
+      <sc-if value="{{ sel.name }}">
+      <div style="font-family:'Space Mono',monospace;font-size:clamp(9px,2.4vw,11px);letter-spacing:.12em;text-transform:uppercase;color:#C6432B;margin-bottom:12px;">Now open</div>
+      <div style="font-weight:600;font-size:clamp(1.6rem,6vw,2.6rem);letter-spacing:-.02em;line-height:1.04;">{{ sel.name }}</div>
+      <div style="font-size:clamp(1rem,3.6vw,1.2rem);color:rgba(234,231,223,.6);margin-top:6px;">{{ sel.author }}</div>
+      <p style="margin:clamp(16px,3vh,24px) 0 0;font-size:clamp(1rem,3.6vw,1.18rem);line-height:1.55;color:rgba(234,231,223,.75);text-wrap:pretty;white-space:pre-wrap;">{{ sel.review }}</p>
+      </sc-if>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  spineColors = ['#1c1d20', '#20140f', '#161617', '#1a1c1a', '#211a12', '#141416', '#1d161a', '#181818'];
+  state = { sel: null, books: [], colors: {} };  // sel null = all closed; colors[idx] = spine color from cover
+
+  componentDidMount() {
+    fetch('/api/books').then(r => r.json()).then(books => {
+      this.setState({ books });
+      books.forEach((bk, idx) => { if (bk.cover) this.sampleColor(idx, bk.cover); });
+    }).catch(() => {});
+  }
+
+  // average the cover image down to one colour for the spine (uploads are same-origin)
+  sampleColor(idx, url) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = 8;
+        const ctx = cv.getContext('2d');
+        ctx.drawImage(img, 0, 0, 8, 8);
+        const d = ctx.getImageData(0, 0, 8, 8).data;
+        let r = 0, g = 0, b = 0, n = d.length / 4;
+        for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; }
+        // darken a touch so white text stays legible
+        const f = v => Math.round((v / n) * 0.72);
+        const col = 'rgb(' + f(r) + ',' + f(g) + ',' + f(b) + ')';
+        this.setState({ colors: { ...this.state.colors, [idx]: col } });
+      } catch (e) { /* tainted/broken image — keep fallback colour */ }
+    };
+    img.src = url;
+  }
+
+  renderVals() {
+    const books = this.state.books || [];
+    const sel = books[this.state.sel] || { name: '', author: '', review: '', cover: '' };
+
+    const SP = 40, CW = 152, H = 232;   // spine thickness, cover width, height
+    const GAP = 190;                    // how far neighbours slide to clear the open cover
+
+    const open = this.state.sel;  // index of the open book, or null
+    const shelf = books.map((bk, idx) => {
+      const active = idx === open;
+      // neighbours slide away only when a book is open; open book lifts + comes forward
+      const shiftX = (open === null || active) ? 0 : (idx < open ? -GAP : GAP);
+      const groupRot = active ? -26 : 0;   // whole book turns to face the viewer when open
+      const coverRot = active ? 34 : 90;    // cover: 90 = shut against spine, 34 = swung open
+      const lift = active ? -14 : 0;
+      const fwd = active ? 44 : 0;
+      const spineColor = this.state.colors[idx] || this.spineColors[idx % this.spineColors.length];
+      return {
+        name: bk.name, author: bk.author, cover: bk.cover,
+        onClick: () => this.setState({ sel: active ? null : idx }),  // toggle open/closed
+        wrapStyle: {
+          flex: 'none', width: SP + 'px', height: H + 'px', perspective: '1600px',
+          position: 'relative', cursor: 'pointer', zIndex: active ? 30 : 10
+        },
+        groupStyle: {
+          position: 'relative', width: SP + 'px', height: H + 'px', transformStyle: 'preserve-3d',
+          transform: 'translateX(' + shiftX + 'px) translateY(' + lift + 'px) '
+            + 'translateZ(' + fwd + 'px) rotateY(' + groupRot + 'deg)',
+          transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'
+        },
+        // spine = front face on the shelf: book colour, name in white
+        spineStyle: {
+          position: 'absolute', inset: '0', width: SP + 'px', height: '100%',
+          background: spineColor, color: '#fff',
+          borderTop: '1px solid rgba(255,255,255,.14)', borderBottom: '1px solid rgba(255,255,255,.14)',
+          borderRight: '1px solid rgba(0,0,0,.45)', borderLeft: '4px solid rgba(0,0,0,.35)',
+          boxShadow: active ? '0 30px 60px rgba(0,0,0,.6)' : '0 10px 24px rgba(0,0,0,.45)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backfaceVisibility: 'hidden'
+        },
+        // cover hinged on the spine's right edge, swings open on click
+        coverStyle: {
+          position: 'absolute', top: '0', left: SP + 'px', width: CW + 'px', height: '100%',
+          transformOrigin: 'left center', transform: 'rotateY(' + coverRot + 'deg)',
+          background: '#141416', border: '1px solid rgba(234,231,223,.16)',
+          boxShadow: '0 30px 60px rgba(0,0,0,.55)', overflow: 'hidden', backfaceVisibility: 'hidden',
+          transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'
+        }
+      };
+    });
+    return { sel, shelf };
+  }
+}
+</script>
+</body>
+</html>
